@@ -1,0 +1,1 @@
+export { trafficData } from './trafficData';
