@@ -11,10 +11,11 @@ type propsType = {
 
 export function SimulationCanvas({simulationOptions,generation,nextGen}:propsType) {
 	const simulationElement = useRef(null)
+	const neuralVisualizer = useRef(null)
 	const isRunning = useRef(true)
 
 	useEffect(() => {
-		const animateFrame = animateSimulation(simulationElement, simulationOptions)
+		const animateFrame = animateSimulation(simulationElement, neuralVisualizer, simulationOptions)
 		let frame = 0
 		let lastTopChange = 0
 		const  animation = setInterval(()=> {
@@ -40,6 +41,7 @@ export function SimulationCanvas({simulationOptions,generation,nextGen}:propsTyp
 
 	return (
 		<div className={`SimulationCanvas`}>
+			<canvas ref={neuralVisualizer} id=' neural-window' />
 			<canvas ref={simulationElement} id='simulation-window' />
 		</div>
 	)

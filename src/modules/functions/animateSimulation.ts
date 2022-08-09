@@ -5,20 +5,27 @@ import {
 	generateCars,
 	NeuralNetwork,
 	Heap,
+	Visualizer,
 } from '@/modules'
 import { optionsType } from '@/types'
 
 export function animateSimulation(
 	canvasRef: React.MutableRefObject<null>,
+	visualRef: React.MutableRefObject<null>,
 	simulationOptions: optionsType
 ) {
-	const canvas: HTMLCanvasElement = canvasRef.current!
-	canvas.width = 200
-	canvas.height = window.innerHeight
+	const simulation: HTMLCanvasElement = canvasRef.current!
+	simulation.width = 200
+	simulation.height = window.innerHeight
+	const visualizer: HTMLCanvasElement = visualRef.current!
+	visualizer.width = 400
+	visualizer.height = window.innerHeight
 	const n = simulationOptions.population
-	const ctx: CanvasRenderingContext2D = canvas.getContext('2d')!
 
-	const road = new Road(canvas.width / 2, canvas.width * 0.9, 3)
+	const ctxSimulation: CanvasRenderingContext2D = simulation.getContext('2d')!
+	const ctxVisualizer: CanvasRenderingContext2D = visualizer.getContext('2d')!
+
+	const road = new Road(simulation.width / 2, simulation.width * 0.9, 3)
 	const cars = generateCars(n, road, simulationOptions.render)
 	const traffic = generateTraffic(road, simulationOptions.render)
 
@@ -41,28 +48,30 @@ export function animateSimulation(
 
 	function animate(): void {
 		if (simulationOptions.render) {
-			ctx.fillStyle = 'black'
-			ctx.fillRect(0, 0, canvas.width, canvas.height)
+			ctxSimulation.fillStyle = '#6a6a6a'
+			ctxSimulation.fillRect(0, 0, simulation.width, simulation.height)
 	
-			ctx.save()
-			ctx.translate(0, -camera + canvas.height * 0.7)
-			road.draw(ctx)
+			ctxSimulation.save()
+			ctxSimulation.translate(0, -camera + simulation.height * 0.7)
+			road.draw(ctxSimulation)
 		}
 
 
 		for (let i = 0; i < traffic.length; i++) {
-			traffic[i].update(road.borders, [], ctx)
+			traffic[i].update(road.borders, [], ctxSimulation)
 		}
 
 		for (let i = 0; i < cars.length; i++) {
 			const car = cars[i]
-			car.update(road.borders, traffic, ctx)
+			car.update(road.borders, traffic, ctxSimulation)
 			clean(i)
 		}
 
 		setBest()
 
-		ctx.restore()
+		ctxSimulation.restore()
+		// networkCtx.lineDashOffset = -time / 50
+		Visualizer.drawNetwork(ctxVisualizer, bestCar.brain)
 	}
 
 	function clean(i: number) {
@@ -81,7 +90,6 @@ export function animateSimulation(
 
 		for (let i = 0; i < cars.length; i++) {
 			const car = cars[i]
-			// if (car.isDamaged) continue
 			const score = getFitnessScore(car)
 			car.score = score > car.score ? score : car.score
 			maxHeap.push(car)
@@ -92,15 +100,6 @@ export function animateSimulation(
 		best5.push(maxHeap.pop())
 		best5.push(maxHeap.pop())
 		best5.push(maxHeap.pop())
-
-		// console.clear()
-		// console.table({
-		// 	first:best5[0].score,
-		// 	second:best5[1].score,
-		// 	third:best5[2].score,
-		// 	fourth:best5[3].score,
-		// 	fifth:best5[4].score,
-		// })
 
 		const currentCar = best5[0]
 

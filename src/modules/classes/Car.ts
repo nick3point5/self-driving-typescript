@@ -84,7 +84,6 @@ export class Car {
 		}
 		if (this.type === 'ai') {
 			if (this.best) {
-				console.log("best")
 				return carGreen
 			}
 			return carBlue
@@ -122,25 +121,26 @@ export class Car {
 		if (this.best && this.sensor) {
 			this.sensor.draw(ctx)
 		}
-		// ctx.save()
-		// ctx.translate(this.x, this.y)
-		// ctx.rotate(-this.angle)
-		// ctx.drawImage(
-		// 	this.image,
-		// 	-this.width / 2,
-		// 	-this.height / 2,
-		// 	this.width,
-		// 	this.height
-		// )
-		// ctx.restore()
+		this.image.src = this.getImage()
+		ctx.save()
+		ctx.translate(this.x, this.y)
+		ctx.rotate(-this.angle)
+		ctx.drawImage(
+			this.image,
+			-this.width / 2,
+			-this.height / 2,
+			this.width,
+			this.height
+		)
+		ctx.restore()
 
-		this.color = this.getColor()
-		ctx.fillStyle = this.color
-		ctx.beginPath()
-		ctx.moveTo(this.polygon[0].x, this.polygon[0].y)
-		for (let i = 0; i < this.polygon.length; i++) {
-			ctx.lineTo(this.polygon[i].x, this.polygon[i].y)
-		}
+		// this.color = this.getColor()
+		// ctx.fillStyle = this.color
+		// ctx.beginPath()
+		// ctx.moveTo(this.polygon[0].x, this.polygon[0].y)
+		// for (let i = 0; i < this.polygon.length; i++) {
+		// 	ctx.lineTo(this.polygon[i].x, this.polygon[i].y)
+		// }
 
 		ctx.fill()
 	}
