@@ -61,8 +61,6 @@ export function Home() {
 		newEntry.unshift(generation)
 		newTable.unshift(newEntry)
 
-		console.log(generationTable)
-
 		setGeneration(generation + 1)
 		setGenerationTable(newTable)
 	}

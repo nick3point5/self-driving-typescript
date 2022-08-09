@@ -35,7 +35,8 @@ export class Sensor {
 		roadBorders: pointType[][],
 		traffic: Car[]
 	): intersectionType {
-		let intersectionArray = []
+		let minIntersection = null
+
 		for (let i = 0; i < roadBorders.length; i++) {
 			const intersection = getIntersection(
 				ray[0],
@@ -43,33 +44,29 @@ export class Sensor {
 				roadBorders[i][0],
 				roadBorders[i][1]
 			)
-			if (intersection) {
-				intersectionArray.push(intersection)
+
+			if (!minIntersection || (intersection && intersection.offset < minIntersection.offset)) {
+					minIntersection = intersection
 			}
 		}
 
 		for (let i = 0; i < traffic.length; i++) {
 			const poly = traffic[i].polygon
 			for (let j = 0; j < poly.length; j++) {
-				const touch = getIntersection(
+				const intersection = getIntersection(
 					ray[0],
 					ray[1],
 					poly[j],
 					poly[(j + 1) % poly.length]
 				)
-				if (touch) {
-					intersectionArray.push(touch)
-				}
+
+				if (!minIntersection || (intersection && intersection.offset < minIntersection.offset)) {
+					minIntersection = intersection
+			}
 			}
 		}
 
-		if (intersectionArray.length === 0) {
-			return null
-		} else {
-			const offsets = intersectionArray.map((element) => element.offset)
-			const minOffset = Math.min(...offsets)
-			return intersectionArray.find((element) => element.offset === minOffset)!
-		}
+		return minIntersection
 	}
 
 	private castRays() {

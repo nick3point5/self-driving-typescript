@@ -20,9 +20,8 @@ export class Road{
 
 		this.left = x - width / 2
 		this.right = x + width / 2
-		const infinity = 1_000_000
-		this.top = -infinity
-		this.bottom = infinity
+		this.top = -1_000_000
+		this.bottom = 1_000
 
 		const topLeft = { x: this.left, y: this.top }
 		const topRight = { x: this.right, y: this.top }

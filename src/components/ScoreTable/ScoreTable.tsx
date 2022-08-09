@@ -27,22 +27,24 @@ export function ScoreTable({
 		<div className={`ScoreTable`}>
 			<table>
 				<thead>
-					<td>Gen</td>
-					<td>
-						1<sup>st</sup>
-					</td>
-					<td>
-						2<sup>nd</sup>
-					</td>
-					<td>
-						3<sup>rd</sup>
-					</td>
-					<td>
-						4<sup>th</sup>
-					</td>
-					<td>
-						5<sup>th</sup>
-					</td>
+					<tr>
+						<th>Gen</th>
+						<th>
+							1<sup>st</sup>
+						</th>
+						<th>
+							2<sup>nd</sup>
+						</th>
+						<th>
+							3<sup>rd</sup>
+						</th>
+						<th>
+							4<sup>th</sup>
+						</th>
+						<th>
+							5<sup>th</sup>
+						</th>
+					</tr>
 				</thead>
 				<tbody>
 					<tr>
@@ -56,7 +58,7 @@ export function ScoreTable({
 					{generationTable.map((row, i) => {
 						if (i > 8) return
 						return (
-							<tr>
+							<tr key={i}>
 								<td>{row[0]}</td>
 								<td>{row[1]}</td>
 								<td>{row[2]}</td>
