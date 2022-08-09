@@ -18,8 +18,10 @@ export function SimulationControls({
 	nextGen,
 	useTrainedAI,
 }: propsType) {
-	const [population, setPopulation] = useState(simulationOptions.population)
-	const [mutationRate, setMutationRate] = useState(
+	const [population, setPopulation] = useState<number>(
+		simulationOptions.population
+	)
+	const [mutationRate, setMutationRate] = useState<number>(
 		simulationOptions.mutationRate
 	)
 

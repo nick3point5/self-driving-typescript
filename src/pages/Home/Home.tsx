@@ -2,17 +2,20 @@ import './Home.css'
 import { useState } from 'react'
 import { SimulationCanvas, SimulationControls, ScoreTable } from '@/components'
 import { trainedAI } from '@/data'
+import { optionsType } from '@/types'
+import { NeuralNetwork } from '@/modules'
 
-function initAI() {
+function initAI(): NeuralNetwork | null {
 	const bestAI = localStorage.getItem('bestAI')
 	if (!bestAI) return null
 	return JSON.parse(bestAI)
 }
 
 export function Home() {
-	const [generation, setGeneration] = useState(0)
-	// const [generation, setGeneration] = useState(0)
-	const [simulationOptions] = useState({
+	const [generation, setGeneration] = useState<number>(0)
+	const [generationTable, setGenerationTable] = useState<number[][]>([])
+
+	const [simulationOptions] = useState<optionsType>({
 		population: 100,
 		mutationRate: 0.1,
 		speedOfSimulation: 10,
@@ -23,36 +26,45 @@ export function Home() {
 		render: true,
 	})
 
-	function save() {
+	function save(): void {
 		simulationOptions.bestAI = simulationOptions.currentBest
 		localStorage.setItem('bestAI', JSON.stringify(simulationOptions.bestAI))
 	}
 
-	function useTrainedAI() {
+	function useTrainedAI(): void {
 		simulationOptions.bestAI = trainedAI
 		localStorage.setItem('bestAI', JSON.stringify(trainedAI))
 		setGeneration(1)
 	}
 
-	function discard() {
+	function discard(): void {
 		localStorage.removeItem('bestAI')
 		simulationOptions.bestAI = null
 	}
 
-	function reset() {
+	function reset(): void {
 		discard()
 		setGeneration(1)
+		setGenerationTable([])
 	}
 
-	function apply(population:number, mutationRate:number) {
+	function apply(population: number, mutationRate: number): void {
 		simulationOptions.population = population
 		simulationOptions.mutationRate = mutationRate
 		setGeneration(generation + 1)
 	}
 
-	function nextGen() {
+	function nextGen(): void {
 		save()
+		const newTable = generationTable
+		const newEntry = new Array(...simulationOptions.top5Array)
+		newEntry.unshift(generation)
+		newTable.unshift(newEntry)
+
+		console.log(generationTable)
+
 		setGeneration(generation + 1)
+		setGenerationTable(newTable)
 	}
 
 	return (
@@ -63,7 +75,7 @@ export function Home() {
 				nextGen={nextGen}
 			/>
 
-			<div className="ui">
+			<div className='ui'>
 				<SimulationControls
 					simulationOptions={simulationOptions}
 					reset={reset}
@@ -71,7 +83,11 @@ export function Home() {
 					nextGen={nextGen}
 					useTrainedAI={useTrainedAI}
 				/>
-				<ScoreTable simulationOptions={simulationOptions} generation={generation}/>
+				<ScoreTable
+					simulationOptions={simulationOptions}
+					generation={generation}
+					generationTable={generationTable}
+				/>
 			</div>
 		</div>
 	)
