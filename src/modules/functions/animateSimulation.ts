@@ -27,10 +27,11 @@ export function animateSimulation(
 
 	const road = new Road(simulation.width / 2, simulation.width * 0.9, 3)
 	const cars = generateCars(n, road, simulationOptions.render)
+	// const cars = [new Car(road.getLaneCenter(1), 100, 30, 50, 'user', 4)]
 	const traffic = generateTraffic(road, simulationOptions.render)
 
 	let bestCar = cars[0]
-	let best5 = cars.slice(0, 5)
+	const best5 = new Array(5)
 	let camera = cars[0].y
 
 	if (simulationOptions.bestAI) {
@@ -50,12 +51,11 @@ export function animateSimulation(
 		if (simulationOptions.render) {
 			ctxSimulation.fillStyle = '#6a6a6a'
 			ctxSimulation.fillRect(0, 0, simulation.width, simulation.height)
-	
+
 			ctxSimulation.save()
 			ctxSimulation.translate(0, -camera + simulation.height * 0.7)
 			road.draw(ctxSimulation)
 		}
-
 
 		for (let i = 0; i < traffic.length; i++) {
 			traffic[i].update(road.borders, [], ctxSimulation)
@@ -70,8 +70,8 @@ export function animateSimulation(
 		setBest()
 
 		ctxSimulation.restore()
-		// networkCtx.lineDashOffset = -time / 50
-		Visualizer.drawNetwork(ctxVisualizer, bestCar.brain)
+
+		Visualizer.drawNetwork(ctxVisualizer, bestCar.brain!)
 	}
 
 	function clean(i: number) {
@@ -86,37 +86,37 @@ export function animateSimulation(
 	function setBest() {
 		const maxHeap = new Heap((a, b) => a.score > b.score)
 		bestCar.best = false
-		best5=[]
 
 		for (let i = 0; i < cars.length; i++) {
 			const car = cars[i]
 			const score = getFitnessScore(car)
+
 			car.score = score > car.score ? score : car.score
 			maxHeap.push(car)
 		}
 
-		best5.push(maxHeap.pop())
-		best5.push(maxHeap.pop())
-		best5.push(maxHeap.pop())
-		best5.push(maxHeap.pop())
-		best5.push(maxHeap.pop())
+		for (let i = 0; i < 5; i++) {
+			const maxCar = maxHeap.pop()
+			best5[i] = maxCar ? maxCar : null
+		}
 
 		const currentCar = best5[0]
 
-		if(currentCar.score > bestCar.score) {
+		if (currentCar.score > bestCar.score) {
 			bestCar = currentCar
 		}
 
-		camera = traffic[0].y - bestCar.score
-		
+		// camera = traffic[0].y - bestCar.score + 200
+		camera = bestCar.y
+
 		bestCar.best = true
 
 		simulationOptions.currentBest = bestCar.brain!
-		simulationOptions.top5Array = best5.map(car => Math.round(car.score))
+		simulationOptions.top5Array = best5.map(car =>  car ? Math.round(car.score) : 0)
 	}
 
 	function getFitnessScore(car: Car): number {
-		return traffic[0].y - car.y
+		return traffic[0].y - car.y + 200
 	}
 
 	return animate

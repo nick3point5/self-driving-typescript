@@ -5,20 +5,18 @@ import { useEffect, useState } from 'react'
 
 type propsType = {
 	simulationOptions: optionsType
-	save: () => void
-	discard: () => void
 	reset: () => void
 	apply: (a: number, b: number) => void
 	nextGen: () => void
+	useTrainedAI: () => void
 }
 
 export function SimulationControls({
 	simulationOptions,
-	save,
-	discard,
 	reset,
 	apply,
 	nextGen,
+	useTrainedAI,
 }: propsType) {
 	const [population, setPopulation] = useState(simulationOptions.population)
 	const [mutationRate, setMutationRate] = useState(
@@ -27,9 +25,8 @@ export function SimulationControls({
 
 	return (
 		<div className={`SimulationControls`}>
-			<button onClick={save}>save</button>
-			<button onClick={discard}>discard</button>
-			<button onClick={reset}>reset</button>
+			<button onClick={reset}>Reset</button>
+			<button onClick={useTrainedAI}>Use trained AI</button>
 			<InputSlider
 				label={'Population'}
 				value={population}
@@ -49,7 +46,7 @@ export function SimulationControls({
 					apply(population, mutationRate)
 				}}
 			>
-				apply
+				Apply
 			</button>
 			<button
 				onClick={() => {

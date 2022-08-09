@@ -1,6 +1,7 @@
 import './Home.css'
 import { useState } from 'react'
 import { SimulationCanvas, SimulationControls, ScoreTable } from '@/components'
+import { trainedAI } from '@/data'
 
 function initAI() {
 	const bestAI = localStorage.getItem('bestAI')
@@ -25,6 +26,12 @@ export function Home() {
 	function save() {
 		simulationOptions.bestAI = simulationOptions.currentBest
 		localStorage.setItem('bestAI', JSON.stringify(simulationOptions.bestAI))
+	}
+
+	function useTrainedAI() {
+		simulationOptions.bestAI = trainedAI
+		localStorage.setItem('bestAI', JSON.stringify(trainedAI))
+		setGeneration(1)
 	}
 
 	function discard() {
@@ -59,11 +66,10 @@ export function Home() {
 			<div className="ui">
 				<SimulationControls
 					simulationOptions={simulationOptions}
-					save={save}
-					discard={discard}
 					reset={reset}
 					apply={apply}
 					nextGen={nextGen}
+					useTrainedAI={useTrainedAI}
 				/>
 				<ScoreTable simulationOptions={simulationOptions} generation={generation}/>
 			</div>

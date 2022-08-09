@@ -1,4 +1,5 @@
-import { trafficData, Car, Road } from '@/modules'
+import { Car, Road } from '@/modules'
+import { trafficData } from '@/data'
 
 export function generateTraffic(road: Road, render = true) {
 	const traffic: Car[] = []

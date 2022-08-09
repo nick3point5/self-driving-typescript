@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "index": "node ./tools/indexer.js ./src/components -r && node ./tools/indexer.js ./src/modules -r && node ./tools/indexer.js ./src/pages -r"
+    "index": "node ./tools/indexer.js ./src/components -r && node ./tools/indexer.js ./src/modules -r && node ./tools/indexer.js ./src/pages -r && node ./tools/indexer.js ./src/data -r"
   },
   "dependencies": {
     "react": "^18.2.0",
