@@ -1,0 +1,16 @@
+.Header {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	/* position: fixed; */
+	top: 0;
+	background-color: #410303;
+	padding: 1em 0;
+	color:aliceblue;
+}
+
+.Header .header-container {
+	width: 1000px;
+}

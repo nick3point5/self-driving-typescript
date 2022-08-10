@@ -10,8 +10,8 @@ type propsType = {
 }
 
 export function SimulationCanvas({simulationOptions,generation,nextGen}:propsType) {
-	const simulationElement = useRef(null)
-	const neuralVisualizer = useRef(null)
+	const simulationElement = useRef<HTMLCanvasElement>(null)
+	const neuralVisualizer = useRef<HTMLCanvasElement>(null)
 	const isRunning = useRef(true)
 
 	useEffect(() => {

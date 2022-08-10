@@ -10,8 +10,8 @@ import {
 import { optionsType } from '@/types'
 
 export function animateSimulation(
-	canvasRef: React.MutableRefObject<null>,
-	visualRef: React.MutableRefObject<null>,
+	canvasRef: React.RefObject<HTMLCanvasElement>,
+	visualRef: React.RefObject<HTMLCanvasElement>,
 	simulationOptions: optionsType
 ) {
 	const {population, render, bestAI, best5AI, mutationRate, mode} = simulationOptions
@@ -19,13 +19,13 @@ export function animateSimulation(
 	// Create simulation canvas context
 	const simulation: HTMLCanvasElement = canvasRef.current!
 	simulation.width = 200
-	simulation.height = window.innerHeight
+	simulation.height = canvasRef.current?.clientHeight || 800
 	const ctxSimulation: CanvasRenderingContext2D = simulation.getContext('2d')!
 
 	// Create visualizer canvas context
 	const visualizer: HTMLCanvasElement = visualRef.current!
 	visualizer.width = 400
-	visualizer.height = window.innerHeight
+	visualizer.height = canvasRef.current?.clientHeight || 800
 	const ctxVisualizer: CanvasRenderingContext2D = visualizer.getContext('2d')!
 
 	// Create game objects

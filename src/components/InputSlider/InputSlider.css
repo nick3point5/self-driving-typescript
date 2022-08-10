@@ -1,3 +1,17 @@
 .InputSlider {
-	
+	width: 100%;
+}
+
+.input-container {
+	width: 100%;
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+.input-container .number-input {
+	width: 42px;
+}
+.input-container .range-input {
+	width: 100%;
 }

@@ -1,0 +1,16 @@
+.Footer {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	/* position: fixed; */
+	bottom: 0;
+	background-color: #410303;
+	padding: 0.5em 0;
+}
+
+#footer-link {
+	color:aliceblue;
+	text-decoration: none;
+}
