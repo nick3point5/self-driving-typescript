@@ -12,5 +12,26 @@
 }
 
 .Header .header-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
 	width: 1000px;
+}
+
+#git-hub-link {
+	color:aliceblue;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	/* text-decoration: none; */
+}
+
+.header-container h1 {
+	
+}
+
+#git-hub-image {
+
 }
