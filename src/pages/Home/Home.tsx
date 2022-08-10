@@ -40,17 +40,32 @@ export function Home() {
 		localStorage.setItem('best5AI', JSON.stringify(simulationOptions.best5AI))
 	}
 
+	function log() {
+		console.log(trainedAI.levels[0].biases[0])
+		console.log(simulationOptions.best5AI[0]?.levels[0].biases[0])
+	}
+
 	function useTrainedAI(): void {
-		simulationOptions.bestAI = trainedAI
+		const trainedBest5 = new Array(...simulationOptions.best5AI) 
+		trainedBest5.unshift(trainedAI)
+		trainedBest5.pop()
 		localStorage.setItem('bestAI', JSON.stringify(trainedAI))
-		setGeneration(1)
+		localStorage.setItem('best5AI', JSON.stringify(trainedBest5))
+		setSimulationOptions({
+			...simulationOptions,
+			best5AI: trainedBest5,
+			bestAI: trainedAI
+		})
 	}
 
 	function discard(): void {
 		localStorage.removeItem('bestAI')
 		localStorage.removeItem('best5AI')
-		simulationOptions.bestAI = null
-		simulationOptions.best5AI = []
+		setSimulationOptions({
+			...simulationOptions,
+			bestAI: null,
+			best5AI: []
+		})
 	}
 
 	function reset(): void {
@@ -76,6 +91,7 @@ export function Home() {
 
 	return (
 		<div className={`Home page`}>
+			<button onClick={log}>log</button>
 			<SimulationCanvas
 				simulationOptions={simulationOptions}
 				generation={generation}
