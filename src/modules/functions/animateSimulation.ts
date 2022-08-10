@@ -3,9 +3,9 @@ import {
 	Road,
 	generateTraffic,
 	generateCars,
-	NeuralNetwork,
 	Heap,
 	Visualizer,
+	assignAI,
 } from '@/modules'
 import { optionsType } from '@/types'
 
@@ -14,72 +14,53 @@ export function animateSimulation(
 	visualRef: React.MutableRefObject<null>,
 	simulationOptions: optionsType
 ) {
+	const {population, render, bestAI, best5AI, mutationRate, mode} = simulationOptions
+
+	// Create simulation canvas context
 	const simulation: HTMLCanvasElement = canvasRef.current!
 	simulation.width = 200
 	simulation.height = window.innerHeight
+	const ctxSimulation: CanvasRenderingContext2D = simulation.getContext('2d')!
+
+	// Create visualizer canvas context
 	const visualizer: HTMLCanvasElement = visualRef.current!
 	visualizer.width = 400
 	visualizer.height = window.innerHeight
-	const n = simulationOptions.population
-
-	const ctxSimulation: CanvasRenderingContext2D = simulation.getContext('2d')!
 	const ctxVisualizer: CanvasRenderingContext2D = visualizer.getContext('2d')!
 
+	// Create game objects
 	const road = new Road(simulation.width / 2, simulation.width * 0.9, 3)
-	const cars = generateCars(n, road, simulationOptions.render)
-	// const cars = [new Car(road.getLaneCenter(1), 100, 30, 50, 'user', 4)]
-	const traffic = generateTraffic(road, simulationOptions.render)
+	const traffic = generateTraffic(road, render)
 
-	let bestCar = cars[0]
-	const best5: (Car)[] = new Array(5)
-	let camera = cars[0].y
-
-	// assignAI()
-	assign5AI()
-
-	function assignAI() {
-		if (!simulationOptions.bestAI) return
-		
-		for (let i = 0; i < cars.length; i++) {
-			const car = cars[i]
-			const bestAI: NeuralNetwork = JSON.parse(
-				JSON.stringify(simulationOptions.bestAI)
-			)
-			car.brain = bestAI
-			if (i !== 0) {
-				NeuralNetwork.mutate(car.brain, simulationOptions.mutationRate)
-			}
-		}
+	// Create car either user controlled or ai controlled
+	let cars: Car[]
+	if (mode === 'user') {
+		cars = [new Car(road.getLaneCenter(1), 100, 30, 50, 'user', 4)]
+	}else {
+		cars = generateCars(population, road, render)
+		assignAI(best5AI, cars,mutationRate)
 	}
 
+	let bestCar = cars[0]
+	const best5: Car[] = new Array(5)
+	let camera = cars[0].y
 
-	function assign5AI() {
-		if (simulationOptions.best5AI.length=== 0) return
-		const parentAIs = simulationOptions.best5AI
 
-		for (let i = 0; i < parentAIs.length; i++) {
-			const parentAI: NeuralNetwork = JSON.parse(JSON.stringify(parentAIs[i%parentAIs.length]))
-			const car = cars[i]
-			car.brain = parentAI
-		}
-
-		for (let i = parentAIs.length; i < cars.length; i++) {
-			const parentAI: NeuralNetwork = JSON.parse(JSON.stringify(parentAIs[i%parentAIs.length]))
-			const car = cars[i]
-			car.brain = parentAI
-			NeuralNetwork.mutate(car.brain, simulationOptions.mutationRate)
-		}
+	let parentAIs = [bestAI]
+	if (best5AI.length === 0) {
+		parentAIs = best5AI
 	}
 
 	function animate(): void {
-		if (simulationOptions.render) {
+		if (render) {
 			ctxSimulation.fillStyle = '#6a6a6a'
 			ctxSimulation.fillRect(0, 0, simulation.width, simulation.height)
-
 			ctxSimulation.save()
 			ctxSimulation.translate(0, -camera + simulation.height * 0.7)
+
 			road.draw(ctxSimulation)
 		}
+		
 
 		for (let i = 0; i < traffic.length; i++) {
 			traffic[i].update(road.borders, [], ctxSimulation)
@@ -95,6 +76,7 @@ export function animateSimulation(
 
 		ctxSimulation.restore()
 
+		if (mode === 'user') return
 		Visualizer.drawNetwork(ctxVisualizer, bestCar.brain!)
 	}
 
@@ -136,7 +118,9 @@ export function animateSimulation(
 
 		simulationOptions.currentBest = bestCar.brain!
 
-		simulationOptions.currentBest5AI = best5.filter((car: Car|null) => car?.brain).map((car:Car)=> car.brain)
+		simulationOptions.currentBest5AI = best5
+			.filter((car: Car | null) => car?.brain)
+			.map((car: Car) => car.brain)
 
 		simulationOptions.top5Array = best5.map((car) =>
 			car ? Math.round(car.score) : 0
@@ -149,3 +133,4 @@ export function animateSimulation(
 
 	return animate
 }
+

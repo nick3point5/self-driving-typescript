@@ -20,7 +20,7 @@ export function Home() {
 	const [generation, setGeneration] = useState<number>(1)
 	const [generationTable, setGenerationTable] = useState<number[][]>([])
 
-	const [simulationOptions] = useState<optionsType>({
+	const [simulationOptions, setSimulationOptions] = useState<optionsType>({
 		population: 100,
 		mutationRate: 0.1,
 		speedOfSimulation: 10,
@@ -30,6 +30,7 @@ export function Home() {
 		best5AI: init5AI(),
 		top5Array: [],
 		render: true,
+		mode: 'ai'
 	})
 
 	function save(): void {
@@ -47,8 +48,8 @@ export function Home() {
 
 	function discard(): void {
 		localStorage.removeItem('bestAI')
-		simulationOptions.bestAI = null
 		localStorage.removeItem('best5AI')
+		simulationOptions.bestAI = null
 		simulationOptions.best5AI = []
 	}
 
@@ -58,21 +59,19 @@ export function Home() {
 		setGenerationTable([])
 	}
 
-	function apply(population: number, mutationRate: number): void {
-		simulationOptions.population = population
-		simulationOptions.mutationRate = mutationRate
-		setGeneration(generation)
-	}
+	function nextGen(): void {		
+		if (simulationOptions.mode === 'user') {
+			setSimulationOptions({...simulationOptions})
+		} else {
+			save()
+			const newTable = generationTable
+			const newEntry = new Array(...simulationOptions.top5Array)
+			newEntry.unshift(generation)
+			newTable.unshift(newEntry)
+			setGeneration(generation + 1)
+			setGenerationTable(newTable)
+		}
 
-	function nextGen(): void {
-		save()
-		const newTable = generationTable
-		const newEntry = new Array(...simulationOptions.top5Array)
-		newEntry.unshift(generation)
-		newTable.unshift(newEntry)
-
-		setGeneration(generation + 1)
-		setGenerationTable(newTable)
 	}
 
 	return (
@@ -86,8 +85,8 @@ export function Home() {
 			<div className='ui'>
 				<SimulationControls
 					simulationOptions={simulationOptions}
+					setSimulationOptions={setSimulationOptions}
 					reset={reset}
-					apply={apply}
 					nextGen={nextGen}
 					useTrainedAI={useTrainedAI}
 				/>

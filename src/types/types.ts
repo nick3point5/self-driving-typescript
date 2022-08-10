@@ -22,4 +22,5 @@ export type optionsType = {
 	best5AI: (NeuralNetwork | null)[]
 	top5Array: number[]
 	render: boolean
+	mode: "ai" | "user"
 }

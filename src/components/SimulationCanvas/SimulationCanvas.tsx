@@ -37,7 +37,7 @@ export function SimulationCanvas({simulationOptions,generation,nextGen}:propsTyp
 		return ()=>{
 			clearInterval(animation)
 		}
-	}, [generation])
+	}, [generation, simulationOptions])
 
 	return (
 		<div className={`SimulationCanvas`}>

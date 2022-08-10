@@ -14,15 +14,16 @@ export function ScoreTable({
 	generationTable,
 }: propType) {
 	const [scores, setScores] = useState(simulationOptions.top5Array)
+
 	useEffect(() => {
 		const refreshScore = setInterval(() => {
 			setScores(simulationOptions.top5Array)
-		}, 500)
+		}, 100)
 
 		return () => {
 			clearInterval(refreshScore)
 		}
-	}, [])
+	}, [simulationOptions.top5Array])
 	return (
 		<div className={`ScoreTable`}>
 			<table>

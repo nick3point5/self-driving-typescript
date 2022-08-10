@@ -1,20 +1,20 @@
 import './SimulationControls.css'
 import { optionsType } from '@/types'
 import { InputSlider } from '@/components'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, SetStateAction } from 'react'
 
 type propsType = {
 	simulationOptions: optionsType
+	setSimulationOptions: React.Dispatch<SetStateAction<optionsType>>
 	reset: () => void
-	apply: (a: number, b: number) => void
 	nextGen: () => void
 	useTrainedAI: () => void
 }
 
 export function SimulationControls({
 	simulationOptions,
+	setSimulationOptions,
 	reset,
-	apply,
 	nextGen,
 	useTrainedAI,
 }: propsType) {
@@ -25,10 +25,34 @@ export function SimulationControls({
 		simulationOptions.mutationRate
 	)
 
+	const {mode} = simulationOptions
+
+	function changePlayMode() {
+		if (mode === 'ai') {
+			setSimulationOptions({
+				...simulationOptions,
+				mode: 'user'
+			})
+		} else {
+			setSimulationOptions({
+				...simulationOptions,
+				mode: 'ai'
+			})
+		}
+	}
+
+	function apply(population: number, mutationRate: number): void {
+		setSimulationOptions({
+			...simulationOptions,
+			population: population,
+			mutationRate: mutationRate,
+		})
+	}
+
 	return (
 		<div className={`SimulationControls`}>
 			<button onClick={reset}>Reset</button>
-			<button onClick={useTrainedAI}>Use trained AI</button>
+			<button onClick={useTrainedAI}>Use Trained AI</button>
 			<InputSlider
 				label={'Population'}
 				value={population}
@@ -57,6 +81,7 @@ export function SimulationControls({
 			>
 				Next Gen
 			</button>
+			<button onClick={changePlayMode}>{mode==='ai' ? `Free Play` : `AI Play`}</button>
 		</div>
 	)
 }
