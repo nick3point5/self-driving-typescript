@@ -59,7 +59,7 @@ export function SimulationControls({
 					<button onClick={useTrainedAI}>Trained AI</button>
 				</ToolTip>
 				{mode === 'ai' ? (
-					<ToolTip content='Drive a car with the keyboard.'>
+					<ToolTip content='Drive a car with the arrow key.'>
 						<button onClick={changePlayMode}>Free Play</button>
 					</ToolTip>
 				) : (

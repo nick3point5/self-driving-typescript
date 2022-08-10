@@ -43,7 +43,10 @@ export function animateSimulation(
 
 	let bestCar = cars[0]
 	const best5: Car[] = new Array(5)
-	let camera = cars[0].y
+	let camera = {
+		x: 0,
+		y: cars[0].y,
+	}
 
 
 	let parentAIs = [bestAI]
@@ -56,7 +59,7 @@ export function animateSimulation(
 			ctxSimulation.fillStyle = '#6a6a6a'
 			ctxSimulation.fillRect(0, 0, simulation.width, simulation.height)
 			ctxSimulation.save()
-			ctxSimulation.translate(0, -camera + simulation.height * 0.7)
+			ctxSimulation.translate(camera.x, -camera.y + simulation.height * 0.7)
 
 			road.draw(ctxSimulation)
 		}
@@ -112,7 +115,7 @@ export function animateSimulation(
 			bestCar = currentCar
 		}
 
-		camera = bestCar.y
+		camera.y = traffic[0].y - bestCar.score + 200
 
 		bestCar.best = true
 
