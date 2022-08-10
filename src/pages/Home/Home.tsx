@@ -10,9 +10,14 @@ function initAI(): NeuralNetwork | null {
 	if (!bestAI) return null
 	return JSON.parse(bestAI)
 }
+function init5AI(): NeuralNetwork[] {
+	const dataBest5 = localStorage.getItem('best5AI')
+	if (!dataBest5) return []
+	return JSON.parse(dataBest5)
+}
 
 export function Home() {
-	const [generation, setGeneration] = useState<number>(0)
+	const [generation, setGeneration] = useState<number>(1)
 	const [generationTable, setGenerationTable] = useState<number[][]>([])
 
 	const [simulationOptions] = useState<optionsType>({
@@ -21,14 +26,17 @@ export function Home() {
 		speedOfSimulation: 10,
 		currentBest: null,
 		bestAI: initAI(),
+		currentBest5AI: [],
+		best5AI: init5AI(),
 		top5Array: [],
-		controlAction: null,
 		render: true,
 	})
 
 	function save(): void {
 		simulationOptions.bestAI = simulationOptions.currentBest
+		simulationOptions.best5AI = simulationOptions.currentBest5AI
 		localStorage.setItem('bestAI', JSON.stringify(simulationOptions.bestAI))
+		localStorage.setItem('best5AI', JSON.stringify(simulationOptions.best5AI))
 	}
 
 	function useTrainedAI(): void {
@@ -40,6 +48,8 @@ export function Home() {
 	function discard(): void {
 		localStorage.removeItem('bestAI')
 		simulationOptions.bestAI = null
+		localStorage.removeItem('best5AI')
+		simulationOptions.best5AI = []
 	}
 
 	function reset(): void {
@@ -51,7 +61,7 @@ export function Home() {
 	function apply(population: number, mutationRate: number): void {
 		simulationOptions.population = population
 		simulationOptions.mutationRate = mutationRate
-		setGeneration(generation + 1)
+		setGeneration(generation)
 	}
 
 	function nextGen(): void {

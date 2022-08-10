@@ -31,10 +31,15 @@ export function animateSimulation(
 	const traffic = generateTraffic(road, simulationOptions.render)
 
 	let bestCar = cars[0]
-	const best5 = new Array(5)
+	const best5: (Car)[] = new Array(5)
 	let camera = cars[0].y
 
-	if (simulationOptions.bestAI) {
+	// assignAI()
+	assign5AI()
+
+	function assignAI() {
+		if (!simulationOptions.bestAI) return
+		
 		for (let i = 0; i < cars.length; i++) {
 			const car = cars[i]
 			const bestAI: NeuralNetwork = JSON.parse(
@@ -44,6 +49,25 @@ export function animateSimulation(
 			if (i !== 0) {
 				NeuralNetwork.mutate(car.brain, simulationOptions.mutationRate)
 			}
+		}
+	}
+
+
+	function assign5AI() {
+		if (simulationOptions.best5AI.length=== 0) return
+		const parentAIs = simulationOptions.best5AI
+
+		for (let i = 0; i < parentAIs.length; i++) {
+			const parentAI: NeuralNetwork = JSON.parse(JSON.stringify(parentAIs[i%parentAIs.length]))
+			const car = cars[i]
+			car.brain = parentAI
+		}
+
+		for (let i = parentAIs.length; i < cars.length; i++) {
+			const parentAI: NeuralNetwork = JSON.parse(JSON.stringify(parentAIs[i%parentAIs.length]))
+			const car = cars[i]
+			car.brain = parentAI
+			NeuralNetwork.mutate(car.brain, simulationOptions.mutationRate)
 		}
 	}
 
@@ -106,13 +130,17 @@ export function animateSimulation(
 			bestCar = currentCar
 		}
 
-		// camera = traffic[0].y - bestCar.score + 200
 		camera = bestCar.y
 
 		bestCar.best = true
 
 		simulationOptions.currentBest = bestCar.brain!
-		simulationOptions.top5Array = best5.map(car =>  car ? Math.round(car.score) : 0)
+
+		simulationOptions.currentBest5AI = best5.filter((car: Car|null) => car?.brain).map((car:Car)=> car.brain)
+
+		simulationOptions.top5Array = best5.map((car) =>
+			car ? Math.round(car.score) : 0
+		)
 	}
 
 	function getFitnessScore(car: Car): number {

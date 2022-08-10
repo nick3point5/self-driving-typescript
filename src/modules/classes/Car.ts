@@ -22,8 +22,8 @@ export class Car {
 	isDamaged: boolean
 	polygon: pointType[]
 	controls: Controls
-	sensor: Sensor | undefined
-	brain: NeuralNetwork | undefined
+	sensor: Sensor | null
+	brain: NeuralNetwork |  null
 	best: boolean
 	render: boolean
 	color: string
@@ -58,6 +58,8 @@ export class Car {
 		this.color = this.getColor()
 		this.image = new Image()
 		this.image.src = this.getImage()
+		this.sensor = null
+		this.brain = null
 
 		this.controls = new Controls(type, this)
 	}

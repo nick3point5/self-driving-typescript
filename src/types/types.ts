@@ -18,8 +18,8 @@ export type optionsType = {
 	speedOfSimulation: number
 	currentBest: NeuralNetwork | null
 	bestAI: NeuralNetwork | null
+	currentBest5AI: (NeuralNetwork | null)[]
+	best5AI: (NeuralNetwork | null)[]
 	top5Array: number[]
-	controlAction: null | (() => void)
 	render: boolean
-	// controlAction: null | Dispatch<SetStateAction<string>>
 }

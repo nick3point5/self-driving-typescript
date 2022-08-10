@@ -26,7 +26,7 @@ export class Controls {
 				break
 			case 'ai':
 				car.sensor = new Sensor(car)
-				car.brain = new NeuralNetwork([car.sensor.rayCount, 9, 6, 4])
+				car.brain = new NeuralNetwork([car.sensor.rayCount, 6, 4])
 				break
 			default:
 				break
