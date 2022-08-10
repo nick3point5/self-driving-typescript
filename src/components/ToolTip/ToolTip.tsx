@@ -3,9 +3,9 @@ import './ToolTip.css'
 
 type propType = {
 	content: string
-	delay: number
-	fade: number
-	direction: 'top' | 'right' | 'bottom' | 'left'
+	delay?: number
+	fade?: number
+	direction?: 'top' | 'right' | 'bottom' | 'left'
 	children: JSX.Element
 }
 

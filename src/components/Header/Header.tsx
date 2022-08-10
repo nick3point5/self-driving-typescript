@@ -6,6 +6,7 @@ export function Header() {
     <div className={`Header`}>
 			<div className="header-container">
 				<h1>Self Driving Neural Network</h1>
+				<a href=""></a>
 			</div>
     </div>
   )
