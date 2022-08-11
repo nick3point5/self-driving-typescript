@@ -1,4 +1,4 @@
-export const trafficData: [number, number, number, number, string, number][] = [
+export const trafficData: [number, number, number, number, 'traffic', number][] = [
 	[1, -100, 30, 50, 'traffic', 2],
 	[0, -300, 30, 50, 'traffic', 2],
 	[2, -300, 30, 50, 'traffic', 2],
