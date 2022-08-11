@@ -13,7 +13,7 @@ export function Home() {
 		mutationRate: 0.1,
 		speedOfSimulation: 10,
 		currentBest: null,
-		bestAI: trainedAI,
+		bestAI: null,
 		currentBest5AI: [],
 		best5AI: [],
 		top5Array: [],
@@ -27,12 +27,14 @@ export function Home() {
 	}
 
 	function useTrainedAI(): void {
-		const trainedBest5 = new Array(...simulationOptions.best5AI) 
+		const trainedBest5 = new Array(...simulationOptions.currentBest5AI) 
 		trainedBest5.unshift(trainedAI)
 		trainedBest5.pop()
 		setSimulationOptions({
 			...simulationOptions,
 			best5AI: trainedBest5,
+			currentBest5AI: trainedBest5,
+			currentBest: trainedAI,
 			bestAI: trainedAI
 		})
 	}
