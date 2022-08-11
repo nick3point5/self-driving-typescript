@@ -20,14 +20,14 @@ export function ToolTip({
 	let timeoutHide: number
 	const tipElement = useRef<HTMLDivElement>(null)
 
-	useEffect(()=> {
-		return ()=> {
+	useEffect(() => {
+		return () => {
 			clearTimeout(timeoutShow)
 		}
-	},[])
+	}, [])
 
 	const showTip = () => {
-		timeoutShow = setTimeout(()=> {
+		timeoutShow = setTimeout(() => {
 			if (!tipElement.current) return
 			tipElement.current.classList.remove('hidden-tip')
 		}, delay)
@@ -35,7 +35,7 @@ export function ToolTip({
 	}
 
 	const hideTip = () => {
-		timeoutHide = setTimeout(()=> {
+		timeoutHide = setTimeout(() => {
 			if (!tipElement.current) return
 			tipElement.current.classList.add('hidden-tip')
 		}, fade)
@@ -45,7 +45,9 @@ export function ToolTip({
 	return (
 		<div className={`ToolTip`} onMouseEnter={showTip} onMouseLeave={hideTip}>
 			{children}
-			<div ref={tipElement} className={`Tooltip-Tip ${direction} hidden-tip`}>{content}</div>
+			<div ref={tipElement} className={`Tooltip-Tip ${direction} hidden-tip`}>
+				{content}
+			</div>
 		</div>
 	)
 }

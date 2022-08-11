@@ -1,8 +1,12 @@
-import { lerp } from "./lerp"
-import { pointType, intersectionType } from "types"
+import { lerp } from './lerp'
+import { pointType, intersectionType } from 'types'
 
-
-export function getIntersection(A: pointType, B: pointType, C: pointType, D: pointType): intersectionType {
+export function getIntersection(
+	A: pointType,
+	B: pointType,
+	C: pointType,
+	D: pointType
+): intersectionType {
 	const tTop = (D.x - C.x) * (A.y - C.y) - (D.y - C.y) * (A.x - C.x)
 	const uTop = (C.y - A.y) * (A.x - B.x) - (C.x - A.x) * (A.y - B.y)
 	const bottom = (D.y - C.y) * (B.x - A.x) - (D.x - C.x) * (B.y - A.y)

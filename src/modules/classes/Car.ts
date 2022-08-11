@@ -23,7 +23,7 @@ export class Car {
 	polygon: pointType[]
 	controls: Controls
 	sensor: Sensor | null
-	brain: NeuralNetwork |  null
+	brain: NeuralNetwork | null
 	best: boolean
 	render: boolean
 	color: string
@@ -106,7 +106,7 @@ export class Car {
 		if (this.type === 'ai') {
 			if (this.best) {
 				return 'rgba(0,255,255,1)'
-			} 
+			}
 			return 'rgba(0,0,255,0.5)'
 		}
 		if (this.type === 'traffic') {

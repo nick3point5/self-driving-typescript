@@ -24,7 +24,7 @@ export function SimulationControls({
 		simulationOptions.population
 	)
 	const [mutationPercent, setMutationPercent] = useState<number>(
-		simulationOptions.mutationRate*100
+		simulationOptions.mutationRate * 100
 	)
 
 	function changePlayMode() {
@@ -45,13 +45,13 @@ export function SimulationControls({
 		setSimulationOptions({
 			...simulationOptions,
 			population: population,
-			mutationRate: mutationPercent/100,
+			mutationRate: mutationPercent / 100,
 		})
 	}
 
 	return (
 		<div className={`SimulationControls`}>
-			<div className="row-container">
+			<div className='row-container'>
 				<ToolTip content='Deletes all AIs and reset the simulation.'>
 					<button onClick={reset}>Reset</button>
 				</ToolTip>
@@ -68,7 +68,7 @@ export function SimulationControls({
 					</ToolTip>
 				)}
 			</div>
-			<div className="column-container">
+			<div className='column-container'>
 				<ToolTip content='Number of AI simulated.'>
 					<InputSlider
 						label={'Population'}
@@ -86,15 +86,15 @@ export function SimulationControls({
 					/>
 				</ToolTip>
 			</div>
-			<div className="row-container">
-			<ToolTip content='Apply settings'>
-				<button
-					onClick={() => {
-						apply(population, mutationPercent)
-					}}
-				>
-					Apply
-				</button>
+			<div className='row-container'>
+				<ToolTip content='Apply settings'>
+					<button
+						onClick={() => {
+							apply(population, mutationPercent)
+						}}
+					>
+						Apply
+					</button>
 				</ToolTip>
 				<ToolTip content='Manually save current best and run next generation.'>
 					<button

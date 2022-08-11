@@ -6,5 +6,5 @@
 - The AI uses a neural network. 
 - The network is trained using a genetic algorithm. 
 - The 5 best AI with the highest fitness score is used to generate the next set of AI. 
-- The fitness score is determined by how far into traffic the AI travels.
+- The fitness score measures how far into traffic the AI travels.
 

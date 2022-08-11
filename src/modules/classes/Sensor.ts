@@ -45,8 +45,11 @@ export class Sensor {
 				roadBorders[i][1]
 			)
 
-			if (!minIntersection || (intersection && intersection.offset < minIntersection.offset)) {
-					minIntersection = intersection
+			if (
+				!minIntersection ||
+				(intersection && intersection.offset < minIntersection.offset)
+			) {
+				minIntersection = intersection
 			}
 		}
 
@@ -60,9 +63,12 @@ export class Sensor {
 					poly[(j + 1) % poly.length]
 				)
 
-				if (!minIntersection || (intersection && intersection.offset < minIntersection.offset)) {
+				if (
+					!minIntersection ||
+					(intersection && intersection.offset < minIntersection.offset)
+				) {
 					minIntersection = intersection
-			}
+				}
 			}
 		}
 

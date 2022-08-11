@@ -29,6 +29,9 @@ export function ScoreTable({
 			<table>
 				<thead>
 					<tr>
+						<th colSpan={6}>Best Fitness Scores</th>
+					</tr>
+					<tr>
 						<th>Gen</th>
 						<th>
 							1<sup>st</sup>

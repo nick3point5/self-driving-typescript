@@ -1,4 +1,4 @@
-import './InputSlider.css';
+import './InputSlider.css'
 
 type propsType = {
 	label: string
@@ -9,13 +9,20 @@ type propsType = {
 	step?: number
 }
 
-export function InputSlider({ label, value, setValue, min=1, max=100, step=1 }:propsType) {
+export function InputSlider({
+	label,
+	value,
+	setValue,
+	min = 1,
+	max = 100,
+	step = 1,
+}: propsType) {
 	function handleInput(event: React.ChangeEvent<HTMLInputElement>) {
 		event.preventDefault()
 		const { value } = event.target
 		if (+value > max) {
 			setValue(max)
-		} else if(+value < min){
+		} else if (+value < min) {
 			setValue(1)
 		} else {
 			setValue(+value)

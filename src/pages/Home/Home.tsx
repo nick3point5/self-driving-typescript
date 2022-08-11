@@ -18,7 +18,7 @@ export function Home() {
 		best5AI: [],
 		top5Array: [],
 		render: true,
-		mode: 'ai'
+		mode: 'ai',
 	})
 
 	function save(): void {
@@ -27,7 +27,7 @@ export function Home() {
 	}
 
 	function useTrainedAI(): void {
-		const trainedBest5 = new Array(...simulationOptions.currentBest5AI) 
+		const trainedBest5 = new Array(...simulationOptions.currentBest5AI)
 		trainedBest5.unshift(trainedAI)
 		trainedBest5.pop()
 		setSimulationOptions({
@@ -35,7 +35,7 @@ export function Home() {
 			best5AI: trainedBest5,
 			currentBest5AI: trainedBest5,
 			currentBest: trainedAI,
-			bestAI: trainedAI
+			bestAI: trainedAI,
 		})
 	}
 
@@ -43,7 +43,7 @@ export function Home() {
 		setSimulationOptions({
 			...simulationOptions,
 			bestAI: null,
-			best5AI: []
+			best5AI: [],
 		})
 	}
 
@@ -53,9 +53,9 @@ export function Home() {
 		setGenerationTable([])
 	}
 
-	function nextGen(): void {		
+	function nextGen(): void {
 		if (simulationOptions.mode === 'user') {
-			setSimulationOptions({...simulationOptions})
+			setSimulationOptions({ ...simulationOptions })
 		} else {
 			save()
 			const newTable = generationTable

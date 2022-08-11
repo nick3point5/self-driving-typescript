@@ -6,7 +6,7 @@ import {
 	Heap,
 	Visualizer,
 	assignAI,
-	Camera
+	Camera,
 } from '@/modules'
 import { optionsType } from '@/types'
 
@@ -15,7 +15,8 @@ export function animateSimulation(
 	visualRef: React.RefObject<HTMLCanvasElement>,
 	simulationOptions: optionsType
 ) {
-	const {population, render, bestAI, best5AI, mutationRate, mode} = simulationOptions
+	const { population, render, bestAI, best5AI, mutationRate, mode } =
+		simulationOptions
 	const height = canvasRef.current?.clientHeight || 800
 
 	// Create simulation canvas context
@@ -38,9 +39,9 @@ export function animateSimulation(
 	let cars: Car[]
 	if (mode === 'user') {
 		cars = [new Car(road.getLaneCenter(1), 100, 30, 50, 'user', 4)]
-	}else {
+	} else {
 		cars = generateCars(population, road, render)
-		assignAI(best5AI, cars,mutationRate)
+		assignAI(best5AI, cars, mutationRate)
 	}
 
 	let bestCar = cars[0]
@@ -60,7 +61,7 @@ export function animateSimulation(
 			ctxSimulation.translate(camera.x, -camera.y + camera.height * 0.7)
 
 			road.draw(ctxSimulation)
-		}	
+		}
 
 		for (let i = 0; i < traffic.length; i++) {
 			const car = traffic[i]
@@ -71,7 +72,7 @@ export function animateSimulation(
 
 		for (let i = 0; i < cars.length; i++) {
 			const car = cars[i]
-	
+
 			car.render = camera.isViewable(car)
 			car.update(road.borders, traffic, ctxSimulation)
 			clean(i)
@@ -138,4 +139,3 @@ export function animateSimulation(
 
 	return animate
 }
-

@@ -2,9 +2,9 @@ type pointType = {
 	x: number
 	y: number
 }
-import { lerp } from "@/modules"
+import { lerp } from '@/modules'
 
-export class Road{
+export class Road {
 	x: number
 	width: number
 	laneCount: number
@@ -13,7 +13,7 @@ export class Road{
 	top: number
 	bottom: number
 	borders: pointType[][]
-	constructor(x:number, width:number, laneCount = 3) {
+	constructor(x: number, width: number, laneCount = 3) {
 		this.x = x
 		this.width = width
 		this.laneCount = laneCount
@@ -33,7 +33,7 @@ export class Road{
 		]
 	}
 
-	getLaneCenter(laneIndex:number) {
+	getLaneCenter(laneIndex: number) {
 		const laneWidth = this.width / this.laneCount
 		return (
 			this.left +

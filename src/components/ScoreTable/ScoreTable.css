@@ -1,16 +1,18 @@
 .ScoreTable {
-	
 }
 
-table, th, td {
-  border: 2px solid;
+table,
+th,
+td {
+	border: 2px solid;
 }
 
 table {
-  border-collapse: collapse;
+	border-collapse: collapse;
 }
 
-th, td {
-  width: 40px;
+th,
+td {
+	width: 40px;
 	text-align: center;
 }
