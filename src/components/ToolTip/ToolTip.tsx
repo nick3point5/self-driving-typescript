@@ -31,6 +31,7 @@ export function ToolTip({
 			if (!tipElement.current) return
 			tipElement.current.classList.remove('hidden-tip')
 		}, delay)
+		clearTimeout(timeoutHide)
 	}
 
 	const hideTip = () => {
@@ -38,6 +39,7 @@ export function ToolTip({
 			if (!tipElement.current) return
 			tipElement.current.classList.add('hidden-tip')
 		}, fade)
+		clearTimeout(timeoutShow)
 	}
 
 	return (
