@@ -34,9 +34,6 @@ export function animateSimulation(
 	// Create game objects
 	const road = new Road(simulation.width / 2, simulation.width * 0.9, 3)
 	const traffic = generateTraffic(road, render)
-	const trafficPolygons = traffic.map(car => car.polygon)
-	const collisionPolygons = trafficPolygons
-	// const collisionPolygons = trafficPolygons.concat(road.borders)
 
 	// Create car either user controlled or ai controlled
 	let cars: Car[]
@@ -50,11 +47,6 @@ export function animateSimulation(
 	let bestCar = cars[0]
 	const best5: Car[] = new Array(5)
 	let camera = new Camera(0, cars[0].y, simulation.height, simulation.width)
-
-	let parentAIs = [bestAI]
-	if (best5AI.length === 0) {
-		parentAIs = best5AI
-	}
 
 	function animate(): void {
 		if (render) {
@@ -73,6 +65,9 @@ export function animateSimulation(
 			car.update([], ctxSimulation)
 		}
 
+		const trafficPolygons = traffic.map(car => car.polygon)
+		const collisionPolygons = trafficPolygons.concat(road.borders)
+
 		for (let i = 0; i < cars.length; i++) {
 			const car = cars[i]
 
@@ -83,10 +78,14 @@ export function animateSimulation(
 
 		setBest()
 
+		camera.y = traffic[0].y - bestCar.score + 200
+
 		ctxSimulation.restore()
 
-		if (mode === 'user') return
-		Visualizer.drawNetwork(ctxVisualizer, bestCar.brain!)
+		if (mode !== 'user')  {
+			Visualizer.drawNetwork(ctxVisualizer, bestCar.brain!)
+		}
+
 	}
 
 	function clean(i: number) {
@@ -120,8 +119,6 @@ export function animateSimulation(
 		if (currentCar.score > bestCar.score) {
 			bestCar = currentCar
 		}
-
-		camera.y = traffic[0].y - bestCar.score + 200
 
 		bestCar.best = true
 

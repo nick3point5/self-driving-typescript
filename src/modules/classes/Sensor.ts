@@ -19,9 +19,7 @@ export class Sensor {
 		this.readings = []
 	}
 
-	private getReadings(
-		collisionPolygons: pointType[][],
-	): intersectionType[] {
+	private getReadings(collisionPolygons: pointType[][]): intersectionType[] {
 		const readings = []
 		for (let i = 0; i < this.rays.length; i++) {
 			const reading = this.getReading(this.rays[i], collisionPolygons)
@@ -32,40 +30,27 @@ export class Sensor {
 
 	private getReading(
 		ray: pointType[],
-		collisionPolygons: pointType[][],
+		collisionPolygons: pointType[][]
 	): intersectionType {
 		let minIntersection = null
 
-		// for (let i = 0; i < collisionPolygons.length; i++) {
-		// 	const intersection = getIntersection(
-		// 		ray[0],
-		// 		ray[1],
-		// 		collisionPolygons[i][0],
-		// 		collisionPolygons[(i + 1) % collisionPolygons.length][1]
-		// 	)
-
-		// 	if (
-		// 		!minIntersection ||
-		// 		(intersection && intersection.offset < minIntersection.offset)
-		// 	) {
-		// 		minIntersection = intersection
-		// 	}
-		// }
-		console.log(collisionPolygons[0])
 		for (let i = 0; i < collisionPolygons.length; i++) {
-			const  poly = collisionPolygons[i]
-			for (let j = 0; j <  poly.length; j++) {
+			const poly = collisionPolygons[i]
+			for (let j = 0; j < poly.length; j++) {
 				const intersection = getIntersection(
 					ray[0],
 					ray[1],
 					poly[j],
-					poly[(j + 1) %  poly.length]
+					poly[(j + 1) % poly.length]
 				)
 
-				if (
-					!minIntersection ||
-					(intersection && intersection.offset < minIntersection.offset)
-				) {
+				if (intersection === null) continue
+
+				if (!minIntersection) {
+					minIntersection = intersection
+				}
+
+				if (intersection.offset < minIntersection.offset) {
 					minIntersection = intersection
 				}
 			}

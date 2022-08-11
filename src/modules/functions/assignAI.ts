@@ -7,20 +7,14 @@ export function assignAI(
 ) {
 	if (parentAIs.length === 0) return
 
-	for (let i = 0; i < parentAIs.length; i++) {
+	for (let i = 0; i < cars.length; i++) {
 		const parentAI: NeuralNetwork = JSON.parse(
 			JSON.stringify(parentAIs[i % parentAIs.length])
 		)
 		const car = cars[i]
 		car.brain = parentAI
-	}
-
-	for (let i = parentAIs.length; i < cars.length; i++) {
-		const parentAI: NeuralNetwork = JSON.parse(
-			JSON.stringify(parentAIs[i % parentAIs.length])
-		)
-		const car = cars[i]
-		car.brain = parentAI
-		NeuralNetwork.mutate(car.brain, mutationRate)
+		if(i >= parentAIs.length) {
+			NeuralNetwork.mutate(car.brain, mutationRate)
+		}
 	}
 }
