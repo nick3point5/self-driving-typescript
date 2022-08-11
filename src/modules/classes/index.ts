@@ -1,3 +1,4 @@
+export { Camera } from './Camera';
 export { Car } from './Car';
 export { Controls } from './Controls';
 export { Heap } from './Heap';

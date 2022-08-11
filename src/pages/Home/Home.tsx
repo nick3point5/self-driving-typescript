@@ -13,7 +13,7 @@ export function Home() {
 		mutationRate: 0.1,
 		speedOfSimulation: 10,
 		currentBest: null,
-		bestAI: null,
+		bestAI: trainedAI,
 		currentBest5AI: [],
 		best5AI: [],
 		top5Array: [],

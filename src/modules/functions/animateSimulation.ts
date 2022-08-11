@@ -6,6 +6,7 @@ import {
 	Heap,
 	Visualizer,
 	assignAI,
+	Camera
 } from '@/modules'
 import { optionsType } from '@/types'
 
@@ -15,17 +16,18 @@ export function animateSimulation(
 	simulationOptions: optionsType
 ) {
 	const {population, render, bestAI, best5AI, mutationRate, mode} = simulationOptions
+	const height = canvasRef.current?.clientHeight || 800
 
 	// Create simulation canvas context
 	const simulation: HTMLCanvasElement = canvasRef.current!
 	simulation.width = 200
-	simulation.height = canvasRef.current?.clientHeight || 800
+	simulation.height = height
 	const ctxSimulation: CanvasRenderingContext2D = simulation.getContext('2d')!
 
 	// Create visualizer canvas context
 	const visualizer: HTMLCanvasElement = visualRef.current!
 	visualizer.width = 400
-	visualizer.height = canvasRef.current?.clientHeight || 800
+	visualizer.height = height
 	const ctxVisualizer: CanvasRenderingContext2D = visualizer.getContext('2d')!
 
 	// Create game objects
@@ -43,11 +45,7 @@ export function animateSimulation(
 
 	let bestCar = cars[0]
 	const best5: Car[] = new Array(5)
-	let camera = {
-		x: 0,
-		y: cars[0].y,
-	}
-
+	let camera = new Camera(0, cars[0].y, simulation.height, simulation.width)
 
 	let parentAIs = [bestAI]
 	if (best5AI.length === 0) {
@@ -57,20 +55,24 @@ export function animateSimulation(
 	function animate(): void {
 		if (render) {
 			ctxSimulation.fillStyle = '#6a6a6a'
-			ctxSimulation.fillRect(0, 0, simulation.width, simulation.height)
+			ctxSimulation.fillRect(0, 0, camera.width, camera.height)
 			ctxSimulation.save()
-			ctxSimulation.translate(camera.x, -camera.y + simulation.height * 0.7)
+			ctxSimulation.translate(camera.x, -camera.y + camera.height * 0.7)
 
 			road.draw(ctxSimulation)
-		}
-		
+		}	
 
 		for (let i = 0; i < traffic.length; i++) {
-			traffic[i].update(road.borders, [], ctxSimulation)
+			const car = traffic[i]
+
+			car.render = camera.isViewable(car)
+			car.update(road.borders, [], ctxSimulation)
 		}
 
 		for (let i = 0; i < cars.length; i++) {
 			const car = cars[i]
+	
+			car.render = camera.isViewable(car)
 			car.update(road.borders, traffic, ctxSimulation)
 			clean(i)
 		}
