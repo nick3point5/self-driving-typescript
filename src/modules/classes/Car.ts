@@ -13,7 +13,7 @@ export class Car {
 	y: number
 	width: number
 	height: number
-	type: string
+	type: 'traffic' | 'ai' | 'user'
 	maxSpeed: number
 	speed: number
 	acceleration: number
@@ -35,7 +35,7 @@ export class Car {
 		y = 0,
 		width = 20,
 		height = 40,
-		type = 'traffic',
+		type: 'traffic' | 'ai' | 'user' = 'traffic',
 		maxSpeed = 4,
 		render = true
 	) {
@@ -64,7 +64,21 @@ export class Car {
 		this.controls = new Controls(type, this)
 	}
 
+	private assessDamage2(polygon: pointType[][]) {
+		for (let i = 0; i < polygon.length; i++) {
+			if (polyIntersect(this.polygon, polygon[i])) {
+				this.color = this.getColor()
+				return true
+			}
+		}
+
+		return false
+	}
+
 	private assessDamage(roadBorders: pointType[][], traffic: Car[]) {
+		// console.log(traffic.map(car => [car.polygon]))
+		// console.log(roadBorders)
+		// const item = traffic.map(car => car.polygon)
 		for (let i = 0; i < roadBorders.length; i++) {
 			if (polyIntersect(this.polygon, roadBorders[i])) {
 				this.color = this.getColor()
@@ -140,21 +154,29 @@ export class Car {
 	}
 
 	update(
-		roadBorders: pointType[][],
-		traffic: Car[],
+		collisionPolygons: pointType[][],
 		ctx: CanvasRenderingContext2D
 	) {
 		if (this.isDamaged) return
 
-		this.controls.update(roadBorders, traffic)
+		this.controls.update(collisionPolygons)
 		this.polygon = createBoxPolygon(this)
-		this.isDamaged = this.assessDamage(roadBorders, traffic)
-		if (this.sensor) {
-			this.sensor.update(roadBorders, traffic)
-			const offsets = this.sensor.readings.map((s: intersectionType) =>
-				s === null ? 0 : 1 - s.offset
-			)
+
+		if(this.type !== 'traffic') {
+			// Don't check for traffic collision if below first traffic car
+			// if (this.y - this.height < traffic[0].y) {
+			// 	this.isDamaged = this.assessDamage2(collisionPolygons)
+				// this.isDamaged = this.assessDamage(roadBorders)
+			// }
+
+			this.isDamaged = this.assessDamage2(collisionPolygons)
+			// this.isDamaged = this.assessDamage(collisionPolygons, traffic)
+
+			if (this.sensor) {
+				this.sensor.update(collisionPolygons)
+			}
 		}
+
 		this.draw(ctx)
 	}
 }

@@ -20,47 +20,46 @@ export class Sensor {
 	}
 
 	private getReadings(
-		roadBorders: pointType[][],
-		traffic: Car[]
+		collisionPolygons: pointType[][],
 	): intersectionType[] {
 		const readings = []
 		for (let i = 0; i < this.rays.length; i++) {
-			readings.push(this.getReading(this.rays[i], roadBorders, traffic))
+			const reading = this.getReading(this.rays[i], collisionPolygons)
+			readings.push(reading)
 		}
 		return readings
 	}
 
 	private getReading(
 		ray: pointType[],
-		roadBorders: pointType[][],
-		traffic: Car[]
+		collisionPolygons: pointType[][],
 	): intersectionType {
 		let minIntersection = null
 
-		for (let i = 0; i < roadBorders.length; i++) {
-			const intersection = getIntersection(
-				ray[0],
-				ray[1],
-				roadBorders[i][0],
-				roadBorders[i][1]
-			)
+		// for (let i = 0; i < collisionPolygons.length; i++) {
+		// 	const intersection = getIntersection(
+		// 		ray[0],
+		// 		ray[1],
+		// 		collisionPolygons[i][0],
+		// 		collisionPolygons[(i + 1) % collisionPolygons.length][1]
+		// 	)
 
-			if (
-				!minIntersection ||
-				(intersection && intersection.offset < minIntersection.offset)
-			) {
-				minIntersection = intersection
-			}
-		}
-
-		for (let i = 0; i < traffic.length; i++) {
-			const poly = traffic[i].polygon
-			for (let j = 0; j < poly.length; j++) {
+		// 	if (
+		// 		!minIntersection ||
+		// 		(intersection && intersection.offset < minIntersection.offset)
+		// 	) {
+		// 		minIntersection = intersection
+		// 	}
+		// }
+		console.log(collisionPolygons[0])
+		for (let i = 0; i < collisionPolygons.length; i++) {
+			const  poly = collisionPolygons[i]
+			for (let j = 0; j <  poly.length; j++) {
 				const intersection = getIntersection(
 					ray[0],
 					ray[1],
 					poly[j],
-					poly[(j + 1) % poly.length]
+					poly[(j + 1) %  poly.length]
 				)
 
 				if (
@@ -119,8 +118,8 @@ export class Sensor {
 		}
 	}
 
-	update(roadBorders: pointType[][], traffic: Car[]) {
+	update(collisionPolygons: pointType[][]) {
 		this.rays = this.castRays()
-		this.readings = this.getReadings(roadBorders, traffic)
+		this.readings = this.getReadings(collisionPolygons)
 	}
 }

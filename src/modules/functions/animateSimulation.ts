@@ -34,6 +34,9 @@ export function animateSimulation(
 	// Create game objects
 	const road = new Road(simulation.width / 2, simulation.width * 0.9, 3)
 	const traffic = generateTraffic(road, render)
+	const trafficPolygons = traffic.map(car => car.polygon)
+	const collisionPolygons = trafficPolygons
+	// const collisionPolygons = trafficPolygons.concat(road.borders)
 
 	// Create car either user controlled or ai controlled
 	let cars: Car[]
@@ -67,14 +70,14 @@ export function animateSimulation(
 			const car = traffic[i]
 
 			car.render = camera.isViewable(car)
-			car.update(road.borders, [], ctxSimulation)
+			car.update([], ctxSimulation)
 		}
 
 		for (let i = 0; i < cars.length; i++) {
 			const car = cars[i]
 
 			car.render = camera.isViewable(car)
-			car.update(road.borders, traffic, ctxSimulation)
+			car.update(collisionPolygons, ctxSimulation)
 			clean(i)
 		}
 

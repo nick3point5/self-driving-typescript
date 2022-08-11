@@ -107,10 +107,10 @@ export class Controls {
 		this.car.y -= Math.cos(this.car.angle) * this.car.speed
 	}
 
-	update(roadBorders: pointType[][], traffic: Car[]) {
+	update(collisionPolygons: pointType[][]) {
 		this.move()
 		if (this.car.sensor) {
-			this.car.sensor.update(roadBorders, traffic)
+			this.car.sensor.update(collisionPolygons)
 			const offsets = this.car.sensor.readings.map((s: intersectionType) =>
 				s === null ? 0 : 1 - s.offset
 			)

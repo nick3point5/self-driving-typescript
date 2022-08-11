@@ -1,3 +1,5 @@
+import { pointType } from '@/types';
+
 type itemType = {
 	x: number
 	y: number
@@ -6,7 +8,7 @@ type itemType = {
 	angle: number
 }
 
-export function createBoxPolygon(item: itemType) {
+export function createBoxPolygon(item: itemType): pointType[] {
 	const points = []
 	const rad = Math.hypot(item.width, item.height) / 2
 	const alpha = Math.atan2(item.width, item.height)
